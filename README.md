@@ -2,13 +2,17 @@
 
 
 ## Description
-TODO:
+Project Goal: Enhance commonsense reasoning in large language models (LLMs) by exploring and comparing prompt design methods.
+
+Methodology:
+  - Literature review on current prompt strategies and their applications in commonsense reasoning.
+  - Develop our own "PromptBreeder" to automatically generate effective prompts.
+  - Evaluate the performance against techniques like Chain of Thought (CoT), in-context learning, etc. (on BIG-bench or CommonsenseQA)
 
 ## Repository structure
-TODO:
+`report` conains the report pdf and latex source code
 
 ## Usage
-TODO:
 
 ## Contributors
 - Jaša Samec (js7039@student.uni-lj.si)
