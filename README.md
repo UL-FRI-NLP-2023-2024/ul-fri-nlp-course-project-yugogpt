@@ -1,6 +1,7 @@
 # LLM Prompt Strategies for Commonsense-Reasoning Tasks
 
 ## Description
+
 This project aims to investigate and compare various prompt strategies, such as Chain of Thought (CoT), in-context learning, and plan-and-solve techniques, to enhance commonsense reasoning in Large Language Models (LLMs). Using different LLM frameworks and datasets, we evaluate the effectiveness of each strategy. The goal is to understand how different prompting techniques influence LLM performance on tasks reliant on commonsense knowledge.
 
 This project is being developed as part of the *Natural Language Processing* course at the *Faculty of Computer and Information Science* in Ljubljana.
