@@ -20,9 +20,6 @@ In the report folder, you will find the file [report.pdf](report/report.pdf), wh
 ## Usage
 To get started, clone this repository to your local machine:
 
-
-## Usage
-
 ## Contributors
 - Jaša Samec (js7039@student.uni-lj.si)
 - Haris Kupinić (hk8302@student.uni-lj.si)
