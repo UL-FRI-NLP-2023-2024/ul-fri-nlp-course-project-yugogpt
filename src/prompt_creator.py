@@ -1,5 +1,6 @@
 import os
 import json
+import random
 
 class PromptCreator:
     
@@ -11,6 +12,13 @@ class PromptCreator:
         self.data = self.read_data(file_path)
         self.current_index = 0
         self.length = len(self.data)
+        
+        self.COT_examples = self.read_CoT_examples()
+        
+    def read_CoT_examples(self, cot_file_path = "CoT.json"):
+        with open(cot_file_path) as f:
+            data = json.load(f)
+        return data
         
     def read_data(self, file_path):
         with open(file_path) as f:
@@ -38,10 +46,15 @@ class PromptCreator:
         return self.INSTRUCTION_START + "\n" + text + self.INSTRUCTION_END + "\n"
     
     def CoT(self):
-        # Select a random example from the handmade examples
-        # Return the example and prepend it to the prompt
+        #TODO: Add some check to the example is different from the current question
+        random_example = random.choice(self.COT_examples)
         
-        return "BLA BLA BLA"
+        stem_and_choices = self.join_stem_and_choices(random_example['question']['stem'], random_example['question']['choices'])
+                
+        pre_prompt = self.wrap_in_instructions(stem_and_choices)
+        pre_prompt = pre_prompt + random_example['answer'] + "\n"
+                        
+        return pre_prompt
     
     def create_prompt(self, question, extra_instructions, add_beginning_of_answer):
         stem = question['question']['stem']
@@ -80,24 +93,6 @@ class PromptCreator:
     
 
 if __name__ == "__main__":
-    #read cqa_train.jsonl
-    prompt_creator = PromptCreator("zero_shot", 'cqa_train.jsonl')
-    print("ZERO SHOT CHAIN OF THOUGHT")
-    print(prompt_creator.get_next_prompt(extra_instructions="End your answer by writing the answer in the form ANSWER: <your answer>"))
-    print("-----------------------------------")
-    
-    
-    print("NO STRATEGY")
-    prompt_creator.strategy = "none"
-    print(prompt_creator.get_next_prompt())
-    print("-----------------------------------")
-    
-    
-    print("CHAIN OF THOUGHT")
-    prompt_creator.strategy = "cot"
-    print(prompt_creator.get_next_prompt())
-    print("-----------------------------------")
-
-    
-    #print(prompt_creator.get_next_prompt())
-        
+    # Idea: Itterate over the questions in the dataset and generate a prompt for each one
+    prompt_creator = PromptCreator("cot", 'cqa_train.jsonl')
+    print(prompt_creator.get_next_prompt(add_beginning_of_answer=True))
