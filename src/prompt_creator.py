@@ -15,7 +15,7 @@ class PromptCreator:
         
         self.COT_examples = self.read_CoT_examples()
         
-    def read_CoT_examples(self, cot_file_path = "CoT.json"):
+    def read_CoT_examples(self, cot_file_path = "../datasets/CoT.json"):
         with open(cot_file_path) as f:
             data = json.load(f)
         return data
@@ -92,5 +92,6 @@ class PromptCreator:
 
 if __name__ == "__main__":
     # Idea: Itterate over the questions in the dataset and generate a prompt for each one
-    prompt_creator = PromptCreator("cot", 'cqa_train.jsonl')
+    prompt_creator = PromptCreator("none", '../datasets/CommonsenseQA/CommonsenseQA.jsonl')
     print(prompt_creator.get_next_prompt(add_beginning_of_answer=True))
+
