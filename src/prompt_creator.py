@@ -90,8 +90,6 @@ class PromptCreator:
 
         return prompt
 
-    
-
 if __name__ == "__main__":
     # Idea: Itterate over the questions in the dataset and generate a prompt for each one
     prompt_creator = PromptCreator("cot", 'cqa_train.jsonl')
