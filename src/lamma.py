@@ -29,7 +29,7 @@ q, a, ids = load_data(dataset_name)
 prompt_creator = PromptCreator(strategy, (q, a, ids))
 
 res = []
-for i in range(289, len(q)):
+for i in range(len(q)):
     print(f"Processing question {i+1}/{len(q)}")
     prompt = prompt_creator.get_next_prompt(add_beginning_of_answer=True)
 
