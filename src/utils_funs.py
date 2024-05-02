@@ -70,3 +70,8 @@ def load_data(dataset):
 def construct_input(prompt, text):
     inputs = 'Q:' + text + "\nA: " + prompt
     return inputs
+
+if __name__ == "__main__":
+    text = "\n\nRelevant information: \nMona Lisa: Located in the Louvre Museum in Paris, France\nVenus de Milo: Located in the Louvre Museum in Paris, France\n\nPlan: \nStep 1: (A) Identify the locations of the Mona Lisa and the Venus de Milo\nStep 2: Compare the locations\n\nAnswer: \nYes, the Mona Lisa and the Venus de Milo are both located in the Louvre Museum in Paris, France."
+    ans = extract_answer("commonsenseqa", text)
+    print(ans)

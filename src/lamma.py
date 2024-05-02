@@ -17,16 +17,19 @@ pipeline = transformers.pipeline(
 )
 
 # define dataset
-dataset_name = "strategyqa"
+dataset_name = "commonsenseqa" # "strategyqa"
+
+# define strategy
+strategy = "no_prompting" # "plan_and_solve", "zero_shot"
 
 # load data
 q, a, ids = load_data(dataset_name)
 
 # create prompt
-prompt_creator = PromptCreator("zero_shot", (q, a, ids))
+prompt_creator = PromptCreator(strategy, (q, a, ids))
 
 res = []
-for i in range(len(q)):
+for i in range(289, len(q)):
     print(f"Processing question {i+1}/{len(q)}")
     prompt = prompt_creator.get_next_prompt(add_beginning_of_answer=True)
 
@@ -40,7 +43,10 @@ for i in range(len(q)):
     )
 
     response = sequences[0]['generated_text']
-    print(response)
+    response = response.split("[/INST]\nA:")[1:]
+    # join the response
+    response = " ".join(response)
+
     try:
         pred_answer = extract_answer(dataset_name, response)
     except:
@@ -50,13 +56,14 @@ for i in range(len(q)):
     res_dict = {}
     res_dict["ID"] = ids[i]
     res_dict["question"] = q[i]
+    res_dict["whole_pred"] = response
     res_dict["pred"] = pred_answer
     res_dict["answer"] = a[i]
     res_dict["ans"] = a[i] == pred_answer
     res.append(res_dict)
 
     # save results to json
-    with open(f"../generated_result/zero_shot/{dataset_name}.json", "w") as f:
+    with open(f"../generated_result/{strategy}/{dataset_name}.json", "w") as f:
         json.dump(res, f)
 
 # for seq in sequences:
