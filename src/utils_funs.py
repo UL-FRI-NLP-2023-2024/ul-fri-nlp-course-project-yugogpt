@@ -9,7 +9,7 @@ ROOT_DIR = str(Path(__file__).resolve().parents[1])
 
 def calculate_accuracy():
     dataset = "commonsenseqa.json"
-    strategies = ["plan_and_solve", "zero_shot"]
+    strategies = ["plan_and_solve", "zero_shot", "no_prompting"]
     results_path = ROOT_DIR + "/generated_result"
 
     results = {}

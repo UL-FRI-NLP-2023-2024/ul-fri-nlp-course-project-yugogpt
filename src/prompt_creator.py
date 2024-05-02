@@ -2,7 +2,7 @@ import json
 import os
 import random
 
-from utils_funs import calculate_accuracy, load_data
+from utils_funs import load_data
 
 
 class PromptCreator:
@@ -67,13 +67,8 @@ if __name__ == "__main__":
     # create prompt
     prompt_creator = PromptCreator(strategy, (q, a, ids))
 
-    evaluate = True
-
-    # res = []
-    # for i in range(3):  # range(len(q)):
-    #     print(f"Processing question {i+1}/{len(q)}")
-    #     prompt = prompt_creator.get_next_prompt(add_beginning_of_answer=True)
-    #     print(prompt)
-
-    if evaluate:
-        calculate_accuracy()
+    res = []
+    for i in range(3):  # range(len(q)):
+        print(f"Processing question {i+1}/{len(q)}")
+        prompt = prompt_creator.get_next_prompt(add_beginning_of_answer=True)
+        print(prompt)
