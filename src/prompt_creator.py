@@ -1,6 +1,7 @@
 import os
 import json
 import random
+from utils_funs import load_data
 
 class PromptCreator:
     
@@ -49,9 +50,22 @@ class PromptCreator:
             prompt = self.wrap_in_instructions(extra_instructions) + prompt
 
         return prompt
-
+    
 if __name__ == "__main__":
-    # Idea: Itterate over the questions in the dataset and generate a prompt for each one
-    prompt_creator = PromptCreator("none", '../datasets/CommonsenseQA/CommonsenseQA.jsonl')
-    print(prompt_creator.get_next_prompt(add_beginning_of_answer=True))
+    # define dataset
+    dataset_name = "commonsenseqa" # "strategyqa"
 
+    # define strategy
+    strategy = "zero_shot" # "plan_and_solve", "zero_shot"
+
+    # load data
+    q, a, ids = load_data(dataset_name)
+
+    # create prompt
+    prompt_creator = PromptCreator(strategy, (q, a, ids))
+
+    res = []
+    for i in range(3): # range(len(q)):
+        print(f"Processing question {i+1}/{len(q)}")
+        prompt = prompt_creator.get_next_prompt(add_beginning_of_answer=True)
+        print(prompt)

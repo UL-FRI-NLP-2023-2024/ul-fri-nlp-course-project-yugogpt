@@ -20,7 +20,7 @@ pipeline = transformers.pipeline(
 dataset_name = "commonsenseqa" # "strategyqa"
 
 # define strategy
-strategy = "no_prompting" # "plan_and_solve", "zero_shot"
+strategy = "zero_shot" # "plan_and_solve", "zero_shot"
 
 # load data
 q, a, ids = load_data(dataset_name)
@@ -63,7 +63,7 @@ for i in range(len(q)):
     res.append(res_dict)
 
     # save results to json
-    with open(f"../generated_result/{strategy}/{dataset_name}.json", "w") as f:
+    with open(f"../generated_result/{strategy}/{dataset_name}_report.json", "w") as f:
         json.dump(res, f)
 
 # for seq in sequences:
