@@ -20,7 +20,7 @@ pipeline = transformers.pipeline(
 dataset_name = "commonsenseqa" # "strategyqa"
 
 # define strategy
-strategy = "zero_shot" # "plan_and_solve", "zero_shot"
+strategy = "cot" # "no_prompting", "plan_and_solve", "zero_shot"
 
 # load data
 q, a, ids = load_data(dataset_name)
@@ -43,19 +43,24 @@ for i in range(len(q)):
     )
 
     response = sequences[0]['generated_text']
-    response = response.split("[/INST]\nA:")[1:]
-    # join the response
-    response = " ".join(response)
+    if strategy == "cot":   
+        response_list = response.split("A2:")
+        question = response_list[0]
+        response = response_list[1]
+    else:
+        response = response.split("[/INST]\nA:")[1:]
+        # join the response
+        response = " ".join(response)
 
     try:
         pred_answer = extract_answer(dataset_name, response)
-    except:
+    except Exception as e:
+        print(f"Error: {e}")
         pred_answer = "?"
     
-    # print(response)
     res_dict = {}
     res_dict["ID"] = ids[i]
-    res_dict["question"] = q[i]
+    res_dict["question"] = q[i] if strategy != "cot" else question
     res_dict["whole_pred"] = response
     res_dict["pred"] = pred_answer
     res_dict["answer"] = a[i]
@@ -63,7 +68,7 @@ for i in range(len(q)):
     res.append(res_dict)
 
     # save results to json
-    with open(f"../generated_result/{strategy}/{dataset_name}_report.json", "w") as f:
+    with open(f"../generated_result/{strategy}/{dataset_name}.json", "w") as f:
         json.dump(res, f)
 
 # for seq in sequences:
