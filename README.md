@@ -11,12 +11,11 @@ This project is being developed as part of the *Natural Language Processing* cou
 
 **/src**
 
-The /src folder will contain the scripts for running the project.
-It is currently empty.
+The /src folder contains the scripts for running the project.
 
 **/report**
 
-In the report folder, you will find the file [report.pdf](report/report.pdf), which is our report for the first phase of the project.
+In the report folder, you will find the file [report.pdf](report/report.pdf), which is our report for the second phase of the project.
 
 ## Usage
 To get started, clone this repository to your local machine:
