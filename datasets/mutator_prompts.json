@@ -49,10 +49,5 @@
 "48": "Prompt for solution visualization: Instead of just asking for the solution, encourage the user to imagine the solution and the steps required to get there in your prompt.",
 "49": "Encourage reverse thinking: Improve the prompt by asking the user to think about the problem in reverse, starting with the solution and working backwards.",
 "50": "Recommend taking a break: Modify the prompt to suggest that the user take a short break, allowing their subconscious to work on the problem.",
-"51": "What errors are there in the solution?",
-"52": "How could you improve the working out of the problem?",
-"53": "Look carefully to see what you did wrong, how could you fix the problem?",
-"54": "CORRECTION =",
-"55": "Does the above text make sense? What seems wrong with it? Here is an attempt to fix it:",
-"56": "The above working out has some errors, here is a version with the errors fixed"
+"52": "How could you improve the working out of the problem?"
 }]

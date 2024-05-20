@@ -15,10 +15,14 @@ class PromptCreator:
         self.current_index = 0
         self.q, self.a, self.ids = data
         self.length = len(self.q)
+        
+        if "llm" in strategy:
+            self.mutations = json.load(open("../datasets/mutator_prompts.json"))[0]
+        
         if strategy == "cot":
             self.q_cot, self.a_cot, self.ids_cot, self.wa_cot = load_data("commonsenseqa_cot")
 
-    def get_next_prompt(self, extra_instructions=None, add_beginning_of_answer=False):
+    def get_next_prompt(self, extra_instructions=None):
         question = self.q[self.current_index]
         self.current_index += 1
         return self.create_prompt(question, extra_instructions)
@@ -26,12 +30,15 @@ class PromptCreator:
     def zero_shot_CoT(self):
         return "A: Let's think step by step."
 
+    def argumentative_CoT(self):
+        return "A: Let's first consider arguments for and against each choice and then decide which one is the most convincing."
+
     def plan_and_solve(self):
         return "A: Let's first understand the problem, extract relevant variables and their corresponding numerals, and devise a complete plan. Then, let's carry out the plan, calculate intermediate variables (pay attention to correct numerical calculation and commonsense), solve the problem step by step, and show the answer."
 
     def no_prompting():
         return "A:"
-
+    
     def CoT(self, question):
         # get a random COT example
         while True:
@@ -55,17 +62,55 @@ class PromptCreator:
         cot_prompt = cot_q1 + cot_a1 + cot_q2 + cot_a2
         return cot_prompt
 
+    def get_mutation(self):
+        key = random.choice(list(self.mutations.keys()))
+        return self.mutations[key]
+        
+    def LLM1(self, question):        
+        question, anwsers = question.split("Answer Choices:")
+        
+        preface = "Help a system solve the multiple-choice questions by modifying/adding instructions based on the following rule:"
+        
+        mutation = self.get_mutation()
+        
+        pre_prompt = f"{preface}\n{mutation}\n\nQ: {question}\n"
+        pre_prompt = self.wrap_in_instructions(pre_prompt)
+        pre_prompt = pre_prompt + "New Q:"
+        
+        return pre_prompt, "Possible answers: " + anwsers
+
+    def LLMARG(self, question):        
+        question, anwsers = question.split("Answer Choices:")
+        
+        prompt_start = "You are a teacher in a debate club. For the following multiple-choice question, you need to provide a short and compelling argument for each of the answer choices. The question is:"
+        prompt = f"{prompt_start}\n\nQ: {question}\n"
+        prompt_middle = "Now, provide a compelling argument for each of the answer choices:"
+        prompt = f"{prompt}\n{prompt_middle}\n{anwsers}\n"
+        
+        prompt = self.wrap_in_instructions(prompt)
+        
+        prompt = prompt + "Arguments:"
+                
+        return prompt, "Q: " + question + "\n" + "A: " + anwsers
+
     def wrap_in_instructions(self, text):
         return self.INSTRUCTION_START + "\n" + text + self.INSTRUCTION_END + "\n"
 
     def create_prompt(self, question, extra_instructions=False):
         if self.strategy == "cot":
             prompt = self.CoT(question)
+        elif self.strategy == "llm1":    
+            prompt = self.LLM1(question)
+        elif self.strategy == "llm_arg":
+            prompt = self.LLMARG(question)
         else:
             stem_and_choices = self.wrap_in_instructions(question)
             prompt = ""
             if self.strategy == "zero_shot":
                 start_of_answer = self.zero_shot_CoT()
+                prompt = stem_and_choices + start_of_answer
+            elif self.strategy == "argumentative":
+                start_of_answer = self.argumentative_CoT()
                 prompt = stem_and_choices + start_of_answer
             elif self.strategy == "plan_and_solve":
                 start_of_answer = self.plan_and_solve()
@@ -85,7 +130,7 @@ if __name__ == "__main__":
     dataset_name = "commonsenseqa"  # "strategyqa"
 
     # define strategy
-    strategy = "cot"  # "plan_and_solve", "zero_shot"
+    strategy = "llm_arg"  # "plan_and_solve", "zero_shot"
 
     # load data
     q, a, ids = load_data(dataset_name)
@@ -96,5 +141,5 @@ if __name__ == "__main__":
     res = []
     for i in range(1):  # range(len(q)):
         print(f"Processing question {i+1}/{len(q)}")
-        prompt = prompt_creator.get_next_prompt(add_beginning_of_answer=True)
+        prompt = prompt_creator.get_next_prompt()
         print(prompt)
