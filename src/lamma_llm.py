@@ -7,7 +7,7 @@ from prompt_creator import PromptCreator
 from utils_funs import load_data, extract_answer
 
 # define the model
-model = "meta-llama/Llama-2-7b-chat-hf"
+model = "meta-llama/Llama-2-13b-chat-hf"
 tokenizer = AutoTokenizer.from_pretrained(model)
 pipeline = transformers.pipeline(
     "text-generation",
@@ -17,7 +17,7 @@ pipeline = transformers.pipeline(
 )
 
 # define dataset
-dataset_name = "commonsenseqa" # "strategyqa"
+dataset_name = "commonsenseqa" # "strategyqa", "protoqa"
 
 # define strategy
 strategy = "argumentative" # "llm_arg", "no_prompting", "plan_and_solve", "zero_shot", "cot", "llm1"
@@ -84,7 +84,6 @@ for i in range(len(q)):
         new_prompt = prompt_creator.wrap_in_instructions(new_prompt)
         new_prompt = new_prompt + "A:"        
         prompt = new_prompt
-        print(prompt)
         
     sequences = pipeline(
         prompt,
@@ -105,7 +104,6 @@ for i in range(len(q)):
         # join the response
         response = " ".join(response)
 
-    print(response)
 
     try:
 

@@ -36,7 +36,7 @@ class PromptCreator:
     def plan_and_solve(self):
         return "A: Let's first understand the problem, extract relevant variables and their corresponding numerals, and devise a complete plan. Then, let's carry out the plan, calculate intermediate variables (pay attention to correct numerical calculation and commonsense), solve the problem step by step, and show the answer."
 
-    def no_prompting():
+    def no_prompting(self):
         return "A:"
     
     def CoT(self, question):

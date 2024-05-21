@@ -7,7 +7,7 @@ from prompt_creator import PromptCreator
 from utils_funs import load_data, extract_answer
 
 # define the model
-model = "meta-llama/Llama-2-7b-chat-hf"
+model = "meta-llama/Llama-2-13b-chat-hf"
 tokenizer = AutoTokenizer.from_pretrained(model)
 pipeline = transformers.pipeline(
     "text-generation",
@@ -17,10 +17,10 @@ pipeline = transformers.pipeline(
 )
 
 # define dataset
-dataset_name = "commonsenseqa" # "strategyqa"
+dataset_name = "protoqa" # "strategyqa", "commonsenseqa"
 
 # define strategy
-strategy = "cot" # "no_prompting", "plan_and_solve", "zero_shot"
+strategy = "zero_shot" # "no_prompting", "plan_and_solve", "zero_shot" "cot"
 
 # load data
 q, a, ids = load_data(dataset_name)
@@ -31,7 +31,7 @@ prompt_creator = PromptCreator(strategy, (q, a, ids))
 res = []
 for i in range(len(q)):
     print(f"Processing question {i+1}/{len(q)}")
-    prompt = prompt_creator.get_next_prompt(add_beginning_of_answer=True)
+    prompt = prompt_creator.get_next_prompt()
 
     sequences = pipeline(
         prompt,
@@ -53,7 +53,10 @@ for i in range(len(q)):
         response = " ".join(response)
 
     try:
-        pred_answer = extract_answer(dataset_name, response)
+        if dataset_name == "protoqa":
+            pred_answer = "X"
+        else:
+            pred_answer = extract_answer(dataset_name, response)
     except Exception as e:
         print(f"Error: {e}")
         pred_answer = "?"
