@@ -10,7 +10,7 @@ class PromptCreator:
     INSTRUCTION_START = "[INST]"
     INSTRUCTION_END = "[/INST]"
 
-    def __init__(self, strategy, data):
+    def __init__(self, strategy, data, dataset_name="commonsenseqa"):
         self.strategy = strategy
         self.current_index = 0
         self.q, self.a, self.ids = data
@@ -20,7 +20,10 @@ class PromptCreator:
             self.mutations = json.load(open("../datasets/mutator_prompts.json"))[0]
         
         if strategy == "cot":
-            self.q_cot, self.a_cot, self.ids_cot, self.wa_cot = load_data("commonsenseqa_cot")
+            if dataset_name == "commonsenseqa":
+                self.q_cot, _, _, self.wa_cot = load_data("commonsenseqa_cot")
+            else:
+                self.q_cot, _, _, self.wa_cot = load_data("proto_cot")
 
     def get_next_prompt(self, extra_instructions=None):
         question = self.q[self.current_index]
@@ -47,7 +50,7 @@ class PromptCreator:
                 break
 
         cot_prompt = ""
-        cot_intro = "You are a question and answer master. In the input you have two questions. One has a correct response and the other has no response. Your job is to answer the question that has no response."
+        cot_intro = "" #"You are a question and answer master. In the input you have two questions. One has a correct response and the other has no response. Your job is to answer the question that has no response."
         cot_q1 = cot_intro + "\nQ1: " + self.q_cot[cot_idx] + "\n"
         cot_q1 = self.wrap_in_instructions(cot_q1)
 
@@ -126,20 +129,13 @@ class PromptCreator:
 
 
 if __name__ == "__main__":
-    # define dataset
-    dataset_name = "commonsenseqa"  # "strategyqa"
+    dataset_name = "protoqa" 
+    strategy = "cot"
 
-    # define strategy
-    strategy = "llm_arg"  # "plan_and_solve", "zero_shot"
-
-    # load data
     q, a, ids = load_data(dataset_name)
 
-    # create prompt
-    prompt_creator = PromptCreator(strategy, (q, a, ids))
+    prompt_creator = PromptCreator(strategy, (q, a, ids), dataset_name)
 
-    res = []
-    for i in range(1):  # range(len(q)):
-        print(f"Processing question {i+1}/{len(q)}")
+    for i in range(1):
         prompt = prompt_creator.get_next_prompt()
         print(prompt)
