@@ -18,6 +18,7 @@ class PromptCreator:
         
         if "llm" in strategy:
             self.mutations = json.load(open("../datasets/mutator_prompts.json"))[0]
+            self.thinking_styles = json.load(open("../datasets/thinking_styles.json"))[0]
         
         if strategy == "cot":
             if dataset_name == "commonsenseqa":
@@ -71,8 +72,12 @@ class PromptCreator:
         
     def LLM1(self, question):        
         question, anwsers = question.split("Answer Choices:")
-        
-        preface = "Help a system solve the multiple-choice questions by modifying/adding instructions based on the following rule:"
+
+        if len(anwsers) > 0:
+            preface = "Help a system solve the multiple-choice questions by modifying/adding instructions based on the following rule:"
+        else:
+            preface = "Help a system solve the question by modifying/adding instructions based on the following rule:"
+
         
         mutation = self.get_mutation()
         
@@ -80,21 +85,41 @@ class PromptCreator:
         pre_prompt = self.wrap_in_instructions(pre_prompt)
         pre_prompt = pre_prompt + "New Q:"
         
-        return pre_prompt, "Possible answers: " + anwsers
+        return pre_prompt, "Possible answers: " + anwsers if len(anwsers) > 0 else ""
+
+    
+    def get_thinking_style(self):
+        key = random.choice(list(self.thinking_styles.keys()))
+        return self.thinking_styles[key]
+    
+    def LLM_T(self, question):
+        question, anwsers = question.split("Answer Choices:")
+        
+        preface = "You are a teacher and want to help students solve the multiple-choice questions by adding a thinking style. For the question below, you need to provide a tip to help students solve it."
+    
+        thinking_style = self.get_thinking_style()
+        
+        pre_prompt = f"{preface}\nThinking Style:{thinking_style}\nQuestion to solve:\nQ: {question}\n"
+        pre_prompt = self.wrap_in_instructions(pre_prompt)
+        pre_prompt = pre_prompt + "New Q:"
+        
+        return pre_prompt, "Possible answers: " + anwsers if len(anwsers) > 0 else ""
 
     def LLMARG(self, question):        
         question, anwsers = question.split("Answer Choices:")
         
         prompt_start = "You are a teacher in a debate club. For the following multiple-choice question, you need to provide a short and compelling argument for each of the answer choices. The question is:"
         prompt = f"{prompt_start}\n\nQ: {question}\n"
-        prompt_middle = "Now, provide a compelling argument for each of the answer choices:"
-        prompt = f"{prompt}\n{prompt_middle}\n{anwsers}\n"
+        
+        if len(anwsers) > 0:
+            prompt_middle = "Now, provide a compelling argument for each of the answer choices:"
+            prompt = f"{prompt}\n{prompt_middle}\n{anwsers}\n"
         
         prompt = self.wrap_in_instructions(prompt)
         
         prompt = prompt + "Arguments:"
                 
-        return prompt, "Q: " + question + "\n" + "A: " + anwsers
+        return prompt, "Q: " + question + "\n" + "A: " + anwsers  if len(anwsers) > 0 else ""
 
     def wrap_in_instructions(self, text):
         return self.INSTRUCTION_START + "\n" + text + self.INSTRUCTION_END + "\n"
@@ -102,10 +127,12 @@ class PromptCreator:
     def create_prompt(self, question, extra_instructions=False):
         if self.strategy == "cot":
             prompt = self.CoT(question)
-        elif self.strategy == "llm1":    
+        elif self.strategy == "llm_mutate":    
             prompt = self.LLM1(question)
         elif self.strategy == "llm_arg":
             prompt = self.LLMARG(question)
+        elif self.strategy == "llm_thinking":
+            prompt = self.LLM_T(question)    
         else:
             stem_and_choices = self.wrap_in_instructions(question)
             prompt = ""

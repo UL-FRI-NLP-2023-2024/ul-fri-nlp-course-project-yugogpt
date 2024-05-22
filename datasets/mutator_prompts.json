@@ -37,7 +37,6 @@
 "36": "Combine Related Prompts: If you have two related prompts, you can combine them to create a more complex and engaging question. For instance, 'What is X?' and 'Why is Y important?' could be combined to form 'What is X and why is it important in the context of Y?'",
 "37": "Break Down Complex Questions: If a prompt seems too complex, like 'Discuss X,' the improved version could be, 'What is X? What are its main characteristics? What effects does it have on Y and Z?'",
 "38": "Use Open-Ended Questions: Instead of 'Is X true?', you could ask, 'What are the arguments for and against the truth of X?'",
-"39": "Request Comparisons: Instead of 'Describe X,' ask 'Compare and contrast X and Y.'",
 "40": "Include Context: If a prompt seems to lack context, like 'Describe X,' the improved version could be, 'Describe X in the context of its impact on Y during the Z period.'",
 "41": "Make the prompt more visual: Ask the user to visualize the problem or scenario being presented in the prompt.",
 "42": "Ask for a thorough review: Instead of just presenting the problem, ask the user to write down all the relevant information and identify what's missing.",
@@ -46,8 +45,6 @@
 "45": "Promote breaking down problems: Instead of asking the user to solve the problem as a whole, prompt them to break it down into smaller, more manageable parts.",
 "46": "Ask for comprehension: Modify the prompt to ask the user to review and confirm their understanding of all aspects of the problem.",
 "47": "Suggest explanation to others: Change the prompt to suggest that the user try to explain the problem to someone else as a way to simplify it.",
-"48": "Prompt for solution visualization: Instead of just asking for the solution, encourage the user to imagine the solution and the steps required to get there in your prompt.",
 "49": "Encourage reverse thinking: Improve the prompt by asking the user to think about the problem in reverse, starting with the solution and working backwards.",
-"50": "Recommend taking a break: Modify the prompt to suggest that the user take a short break, allowing their subconscious to work on the problem.",
 "52": "How could you improve the working out of the problem?"
 }]

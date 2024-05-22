@@ -17,10 +17,10 @@ pipeline = transformers.pipeline(
 )
 
 # define dataset
-dataset_name = "protoqa" # "strategyqa"
+dataset_name = "protoqa_" # "strategyqa"
 
 # define strategy
-strategy = "cot" # "no_prompting", "plan_and_solve", "zero_shot" "cot"
+strategy = "argumentative" # "no_prompting", "plan_and_solve", "zero_shot" "cot"
 
 # load data
 q, a, ids = load_data(dataset_name)

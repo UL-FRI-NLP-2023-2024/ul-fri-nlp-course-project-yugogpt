@@ -39,6 +39,8 @@ def load_data(dataset):
         datapath = "../datasets/StrategyQA/StrategyQA.json"
     elif dataset == "commonsenseqa_cot":
         datapath = "../datasets/CommonsenseQA/CoT.json"
+    elif dataset == "protoqa_":
+        datapath = "../datasets/ProtoQA/first_10.txt"
 
     # read dataset file
     if dataset.lower() in ['strategyqa']:
@@ -81,6 +83,11 @@ def load_data(dataset):
                 if dataset == "commonsenseqa_cot":
                     whole_a = json_res["answer"]
                     whole_answers.append(whole_a)
+    elif dataset.lower() in ['protoqa_']:
+        with open(datapath) as f:
+            questions = f.readlines()
+            answers = np.zeros(len(questions))
+            ids = range(len(questions)) 
 
     if dataset == "commonsenseqa_cot":
         return questions, answers, ids, whole_answers
