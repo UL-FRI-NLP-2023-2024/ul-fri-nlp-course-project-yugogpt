@@ -22,7 +22,7 @@ The /notebooks folder contains notebooks used during the project.
 
 **/report**
 
-In the report folder, you will find the file [report.pdf](report/report.pdf), which is our report for the first phase of the project.
+In the report folder, you will find the file [report.pdf](report/report.pdf), which is our final report for the project.
 
 **/src**
 
