@@ -26,7 +26,7 @@ strategy = "argumentative" # "no_prompting", "plan_and_solve", "zero_shot" "cot"
 q, a, ids = load_data(dataset_name)
 
 # create prompt
-prompt_creator = PromptCreator(strategy, (q, a, ids))
+prompt_creator = PromptCreator(strategy, (q, a, ids), dataset_name)
 
 res = []
 for i in range(len(q)):
