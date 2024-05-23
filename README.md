@@ -8,15 +8,26 @@ This project is being developed as part of the *Natural Language Processing* cou
 
 ## Repository structure
 
+**/datasets**
 
-**/src**
+The /datasets folder contains commonsense datasets used in the project: CommonsenseQA, ProtoQA.
 
-The /src folder will contain the scripts for running the project.
-It is currently empty.
+**/generated_results**
+
+The /generated_results folder contains generated prompts and answers for different prompting methods, datasets, and LLMs.
+
+**/notebooks**
+
+The /notebooks folder contains notebooks used during the project.
 
 **/report**
 
 In the report folder, you will find the file [report.pdf](report/report.pdf), which is our report for the first phase of the project.
+
+**/src**
+
+The /src folder contains the scripts for running the project. More is explained in the following.
+
 
 ## Usage
 To get started, clone this repository to your local machine:
