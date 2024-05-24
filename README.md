@@ -8,17 +8,49 @@ This project is being developed as part of the *Natural Language Processing* cou
 
 ## Repository structure
 
+**/datasets**
 
-**/src**
+The /datasets folder contains commonsense datasets used in the project: CommonsenseQA, ProtoQA.
 
-The /src folder contains the scripts for running the project.
+**/generated_results**
+
+The /generated_results folder contains generated prompts and answers for different prompting methods, datasets, and LLMs.
+
+**/notebooks**
+
+The /notebooks folder contains notebooks used during the project.
 
 **/report**
 
-In the report folder, you will find the file [report.pdf](report/report.pdf), which is our report for the second phase of the project.
+In the report folder, you will find the file [report.pdf](report/report.pdf), which is our final report for the project.
+
+**/src**
+
+The /src folder contains the scripts for running the project. More is explained in the following.
+
 
 ## Usage
 To get started, clone this repository to your local machine:
+```bash
+git clone https://github.com/UL-FRI-NLP-2023-2024/ul-fri-nlp-course-project-yugogpt.git
+```
+Then, run the following commands:
+```bash
+cd ul-fri-nlp-course-project-yugogpt
+conda create --name nlp_env --file req.txt
+conda activate nlp_env
+```
+
+### Different prompting strategies
+We have implemented following existing prompting strategies: no prompting, zero-shot chain of thought, plan & solve, chain of thought.
+To try those prompting strategies, edit the file lamma.py, by changing *strategy* variable. 
+
+Based on the PromptBreeder, we have created three new prompting strategies: argumentative, using mutations, and using thinking styles.
+To try those prompting strategies, edit the file lamma_llm.py, by changing *strategy* variable. 
+
+### Different datasets
+We have available two multiple-choice datasets: CommonsenseQA and StrategyQA, and one generative dataset ProtoQA. 
+To try different datasets, edit files lamma.py / lamma_llm.py, by changing *dataset_name* variable.
 
 ## Contributors
 - Jaša Samec (js7039@student.uni-lj.si)

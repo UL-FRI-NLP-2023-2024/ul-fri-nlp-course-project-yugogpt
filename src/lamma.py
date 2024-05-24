@@ -17,21 +17,21 @@ pipeline = transformers.pipeline(
 )
 
 # define dataset
-dataset_name = "commonsenseqa" # "strategyqa"
+dataset_name = "protoqa_" # "strategyqa"
 
 # define strategy
-strategy = "cot" # "no_prompting", "plan_and_solve", "zero_shot"
+strategy = "argumentative" # "no_prompting", "plan_and_solve", "zero_shot" "cot"
 
 # load data
 q, a, ids = load_data(dataset_name)
 
 # create prompt
-prompt_creator = PromptCreator(strategy, (q, a, ids))
+prompt_creator = PromptCreator(strategy, (q, a, ids), dataset_name)
 
 res = []
 for i in range(len(q)):
     print(f"Processing question {i+1}/{len(q)}")
-    prompt = prompt_creator.get_next_prompt(add_beginning_of_answer=True)
+    prompt = prompt_creator.get_next_prompt()
 
     sequences = pipeline(
         prompt,
@@ -53,7 +53,10 @@ for i in range(len(q)):
         response = " ".join(response)
 
     try:
-        pred_answer = extract_answer(dataset_name, response)
+        if dataset_name == "protoqa":
+            pred_answer = "X"
+        else:
+            pred_answer = extract_answer(dataset_name, response)
     except Exception as e:
         print(f"Error: {e}")
         pred_answer = "?"
@@ -73,3 +76,4 @@ for i in range(len(q)):
 
 # for seq in sequences:
 #     print(f"Result: {seq['generated_text']}")
+
